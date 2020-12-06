@@ -1,0 +1,72 @@
+1. create a dockerfile using base jenkins/jenkins official image.
+2. Create Jenkins Container using compose file.Run compose file and make sure container is running and you can browser jenkins from localhost:8080.
+3. Add Application code into Github and Create Dockerfile and docker compose for it.
+4. Add Webhook in Github Repo so that it can trigger an automatic build in Jenkins.
+5. As jenkins server is in localhost, we need to use a tool (ngrok) to make the ip address public.
+cd ngrok.exe directory
+ngrok.exe http 8080
+6. Make any changes in code, it should trigger the job in Jenkins.
+7. Run docker-compose file for application using jenkins.
+8. It will start service for application and it can be accessible at localhost:3000
+
+COMMANDS Added in Jenkins to RUN BTH Project
+cd $PWD
+docker ps
+docker-compose stop
+docker container prune --filter "label=com.docker.compose.project=bth_demo" -f
+docker image prune
+#docker rmi -f bth_demo_app
+#docker rmi -f mongo
+docker volume prune --filter "label=com.docker.compose.project=bth_demo" -f
+docker-compose up -d
+
+Challenges Faced:
+1. Webhook for localhost in github.
+2. How to install docker in jenkins container.
+3. SSH to Localhost docker jenkins container.
+
+Others
+- usergroup -aG docker jenkins
+- chown 1000:1000 /var/run/docker.sock on docker host (WSL2)
+- Restart Machine
+
+ - In the container where docker is instaled, in compose file mount /var/run/docker.sock:/var/run/docker.sock
+ - chown 1000:1000 /var/run/docker.sock
+ - We can create volume for sharing data e.g,:
+
+docker volume create --name shared
+Then, run containers like this:
+
+docker run -v shared:/shared-folder <container-1>
+docker run -v shared:/shared-folder <container-2>
+
+
+Points:
+We can run jenkins container as root user to install thing in it.
+docker exec -it -u root jenkins bash
+
+https://github.com/Ardesco/Selenium-Maven-Template
+mvn clean verify 
+mvn clean verify -Dheadless=false -Dremote=true -DseleniumGridURL=http://localhost:4444/wd/hub -Dbrowser=chrome
+https://maven.apache.org/
+
+https://www.jenkins.io/doc/tutorials/build-a-java-app-with-maven/
+
+STEPS:
+
+1. Create docker network create jenkins
+
+2. Run docker in docker container
+docker run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 3000:3000 docker:dind
+
+3. Create Docker File as created in jenkins_data folder and build it 
+docker build -t myjenkins-blueocean:1.1 .
+
+4. Run customize myjenkins-blueocean image
+docker run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro --volume $HOME/:/home --publish 8080:8080 --publish 50000:50000 myjenkins-blueocean:1.1
+
+5. You can access the container using following command
+docker exec -it jenkins-blueocean bash
+
+5076624ad3554585baa81b4ad597c02a
+
