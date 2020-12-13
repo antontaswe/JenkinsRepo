@@ -63,10 +63,11 @@ docker run --name jenkins-docker --rm --detach --privileged --network jenkins --
 docker build -t myjenkins-blueocean:1.1 .
 
 4. Run customize myjenkins-blueocean image
-docker run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro --volume $HOME/:/home --publish 8080:8080 --publish 50000:50000 myjenkins-blueocean:1.1
+docker run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro --publish 8080:8080 --publish 50000:50000 myjenkins-blueocean:1.1
 
 5. You can access the container using following command
 docker exec -it jenkins-blueocean bash
+docker exec -it -u root jenkins-blueocean bash 
 
 5076624ad3554585baa81b4ad597c02a
 

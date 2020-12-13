@@ -1,40 +1,23 @@
 version: '3.8'
 services:
-   docker:
-     container_name: jenkins-docker
-     image: docker:dind
-     ports:
-       - "3000:3000"
-     networks:
-        jenkins:
-           aliases:
-             - docker
-     environment:
-      - DOCKER_TLS_CERTDIR=/certs
-     volumes:
-      - jenkins-docker-certs:/certs/client
-      - jenkins_data:/var/jenkins_home
    jenkins:
      container_name: jenkins-blueocean
-     image: myjenkins-blueocean:1.1
-     build:
-       context: pipeline
+     build: .
      ports:
        - "8080:8080"
-       - "50000:50000"
+ #      - "50000:50000"
      volumes:
        - jenkins_data:/var/jenkins_home
-       - jenkins-docker-certs:/certs/client:ro
        - /var/run/docker.sock:/var/run/docker.sock
-       - $HOME/:/home
+#     privileged: true
      networks:
         - jenkins
-     environment:
-       - DOCKER_HOST=tcp://docker:2376
-       - DOCKER_CERT_PATH=/certs/client
-       - DOCKER_TLS_VERIFY=1
+#     environment:
+#      - DOCKER_HOST=tcp://localhost:2375
+#       - DOCKER_CERT_PATH=/certs/client
+#       - DOCKER_TLS_VERIFY=1
 networks:
   jenkins:
+       name: jenkins
 volumes:
   jenkins_data:
-  jenkins-docker-certs:
