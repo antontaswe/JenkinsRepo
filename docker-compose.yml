@@ -5,17 +5,12 @@ services:
      build: .
      ports:
        - "8080:8080"
- #      - "50000:50000"
      volumes:
        - jenkins_data:/var/jenkins_home
        - /var/run/docker.sock:/var/run/docker.sock
-#     privileged: true
      networks:
         - jenkins
-#     environment:
-#      - DOCKER_HOST=tcp://localhost:2375
-#       - DOCKER_CERT_PATH=/certs/client
-#       - DOCKER_TLS_VERIFY=1
+
 networks:
   jenkins:
        name: jenkins
