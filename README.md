@@ -15,7 +15,8 @@
        - docker ps
        - docker-compose stop
        - docker container prune --filter "label=com.docker.compose.project=buildanddeploy" -f
-       - docker image prune
+       - docker rmi -f buildanddeploy_app
+	   - docker rmi -f mongo
        - docker volume prune --filter "label=com.docker.compose.project=buildanddeploy" -f
        - docker-compose up -d
 9.  Add these commands in Build step ("Execute shell") to create Selenium grid:
