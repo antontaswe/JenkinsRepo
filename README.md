@@ -25,4 +25,11 @@
 	   - cd Selenium_Java 
 	   - docker-compose up -d
 10. Add webhook in Github repository https://github.com/ggoyal23/BTH_Demo.git. Owner-permission required.
+	   - Payload URL: https://{jenkins-url:port}/github-webhook/
+	   - Content type: application/json
+	   - Disable SSL certification
+	   - Trigger only on push events
+	   - In Jenkins job:
+			- Select Git, add repo url in source code management, build from */main
+			- Select Build triggers, then select "GitHub hook trigger for GITScm polling"
 11. Create job "Test". Choose "Pipeline project" and add Github repo https://github.com/ggoyal23/Selenium_Java.git. Build from */master
